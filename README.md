@@ -17,6 +17,18 @@ Open:
 http://localhost:3000
 ```
 
+## Deploy To Vercel
+
+The app can be deployed to Vercel for HTTPS testing:
+
+```bash
+vercel --prod
+```
+
+Vercel serves the frontend from `public/` and runs `api/location.js` as the `/api/location` serverless endpoint. The deployed URL will use the `*.vercel.app` domain.
+
+Location logs on Vercel are written to the function's temporary filesystem and console logs. That storage is not persistent across deployments or serverless instances. Use a database or managed log sink before relying on deployed location logs in production.
+
 ## Replace The YouTube Video
 
 Edit `public/index.html` and replace `VIDEO_ID` in this iframe URL with the actual YouTube video ID:

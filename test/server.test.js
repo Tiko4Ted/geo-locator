@@ -10,6 +10,7 @@ process.env.LOCATION_LOG_FILE = path.join(
 );
 
 const { app, isValidLocationPayload } = require("../server");
+const locationHandler = require("../api/location");
 
 function listen(serverApp) {
   return new Promise((resolve) => {
@@ -88,4 +89,56 @@ test("serves consent page and validates location API", async (t) => {
 
   assert.equal(invalidResponse.status, 400);
   assert.deepEqual(await invalidResponse.json(), { error: "Invalid location payload" });
+});
+
+function createResponse() {
+  return {
+    body: undefined,
+    headers: {},
+    statusCode: 200,
+    setHeader(name, value) {
+      this.headers[name] = value;
+    },
+    status(code) {
+      this.statusCode = code;
+      return this;
+    },
+    json(body) {
+      this.body = body;
+      return this;
+    }
+  };
+}
+
+test("Vercel location handler accepts valid payloads", async () => {
+  await fs.rm(process.env.LOCATION_LOG_FILE, { force: true });
+
+  const req = {
+    body: {
+      latitude: -1.286389,
+      longitude: 36.817223,
+      accuracy: 12,
+      timestamp: "2026-06-12T10:30:00.000Z"
+    },
+    headers: {
+      "user-agent": "node-test",
+      "x-forwarded-for": "127.0.0.1"
+    },
+    method: "POST",
+    socket: {
+      remoteAddress: "127.0.0.1"
+    }
+  };
+  const res = createResponse();
+
+  await locationHandler(req, res);
+
+  assert.equal(res.statusCode, 200);
+  assert.deepEqual(res.body, { status: "received" });
+
+  const logContents = await fs.readFile(process.env.LOCATION_LOG_FILE, "utf8");
+  const logEntry = JSON.parse(logContents.trim().split("\n").at(-1));
+
+  assert.equal(logEntry.userAgent, "node-test");
+  assert.equal(logEntry.ip, "127.0.0.1");
 });

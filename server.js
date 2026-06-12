@@ -1,4 +1,5 @@
 const fs = require("node:fs/promises");
+const os = require("node:os");
 const path = require("node:path");
 
 const cors = require("cors");
@@ -13,6 +14,8 @@ const app = express();
 const port = Number(process.env.PORT) || 3000;
 const logFile = process.env.LOCATION_LOG_FILE
   ? path.resolve(process.env.LOCATION_LOG_FILE)
+  : process.env.VERCEL
+  ? path.join(os.tmpdir(), "location-logs.jsonl")
   : path.join(__dirname, "data", "location-logs.jsonl");
 const logDir = path.dirname(logFile);
 
@@ -83,21 +86,26 @@ async function appendLocationLog(entry) {
   await fs.appendFile(logFile, `${JSON.stringify(entry)}\n`, "utf8");
 }
 
-app.post("/api/location", apiLimiter, async (req, res, next) => {
-  if (!isValidLocationPayload(req.body)) {
-    return res.status(400).json({ error: "Invalid location payload" });
-  }
+function createLocationLogEntry(payload, ip, userAgent) {
+  const { latitude, longitude, accuracy, timestamp } = payload;
 
-  const { latitude, longitude, accuracy, timestamp } = req.body;
-  const entry = {
+  return {
     receivedAt: new Date().toISOString(),
     timestamp,
     latitude,
     longitude,
     accuracy,
-    ip: req.ip,
-    userAgent: req.get("user-agent") || ""
+    ip,
+    userAgent
   };
+}
+
+app.post("/api/location", apiLimiter, async (req, res, next) => {
+  if (!isValidLocationPayload(req.body)) {
+    return res.status(400).json({ error: "Invalid location payload" });
+  }
+
+  const entry = createLocationLogEntry(req.body, req.ip, req.get("user-agent") || "");
 
   try {
     await appendLocationLog(entry);
@@ -130,7 +138,9 @@ if (require.main === module) {
 }
 
 module.exports = {
+  appendLocationLog,
   app,
+  createLocationLogEntry,
   isValidLocationPayload,
   startServer
 };
