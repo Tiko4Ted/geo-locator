@@ -29,15 +29,15 @@ Vercel serves the frontend from `public/` and runs `api/location.js` as the `/ap
 
 Location logs on Vercel are written to the function's temporary filesystem and console logs. That storage is not persistent across deployments or serverless instances. Use a database or managed log sink before relying on deployed location logs in production.
 
-## Replace The YouTube Video
+## YouTube Video
 
-Edit `public/index.html` and replace `VIDEO_ID` in this iframe URL with the actual YouTube video ID:
+The app currently embeds this YouTube video after location permission is granted:
 
-```html
-https://www.youtube.com/embed/VIDEO_ID
+```txt
+https://www.youtube.com/watch?v=nQ-ocvHytzA
 ```
 
-Keep the `/embed/` format so the user remains on this site while watching.
+The page uses the `/embed/` format internally so the user remains on this site while watching.
 
 ## HTTPS Requirement
 
