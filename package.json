@@ -1,0 +1,26 @@
+{
+  "name": "consent-location-video-app",
+  "version": "1.0.0",
+  "description": "Consent-based location verification web app with embedded YouTube video and Express backend logging.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "express",
+    "geolocation",
+    "consent",
+    "youtube"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0"
+  }
+}

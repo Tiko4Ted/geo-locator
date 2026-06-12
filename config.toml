@@ -1,0 +1,92 @@
+# config.toml
+
+[project]
+name = "consent-location-video-app"
+description = "Consent-based location verification web app with embedded YouTube video and Express backend logging."
+language = "javascript"
+runtime = "node"
+framework = "express"
+
+[commands]
+install = "npm install"
+start = "npm start"
+dev = "npm run dev"
+test = "npm test"
+
+[server]
+host = "localhost"
+port = 3000
+entry = "server.js"
+static_dir = "public"
+
+[frontend]
+entry = "public/index.html"
+script = "public/app.js"
+styles = "public/styles.css"
+youtube_embed_placeholder = "VIDEO_ID"
+
+[api]
+location_endpoint = "/api/location"
+method = "POST"
+content_type = "application/json"
+
+[api.payload]
+latitude = "number between -90 and 90"
+longitude = "number between -180 and 180"
+accuracy = "number greater than or equal to 0"
+timestamp = "valid ISO date string"
+
+[storage]
+type = "jsonl"
+path = "data/location-logs.jsonl"
+public_access = false
+
+[privacy]
+consent_required = true
+hidden_tracking_allowed = false
+clear_disclosure_required = true
+stop_sharing_required = true
+collect_only_required_fields = true
+
+[security]
+https_required_in_production = true
+localhost_allowed_for_development = true
+helmet = true
+cors = true
+rate_limit = true
+dotenv = true
+
+[browser_limits]
+background_tracking = false
+tracking_stops_when_tab_closes = true
+tracking_may_pause_when_phone_locks = true
+tracking_stops_when_user_leaves_domain = true
+
+[codex]
+primary_instruction_file = "AGENTS.md"
+spec_file = "SPEC.md"
+task = "Implement the complete project according to SPEC.md and AGENTS.md."
+mode = "code-generation"
+allowed_scope = "local project files only"
+
+[codex.requirements]
+create_missing_files = true
+keep_code_simple = true
+include_readme = true
+include_env_example = true
+do_not_add_database = true
+do_not_add_authentication = true
+do_not_add_hidden_tracking = true
+do_not_use_deceptive_ui = true
+
+[codex.acceptance]
+npm_install_must_work = true
+npm_start_must_work = true
+frontend_served_at_localhost_3000 = true
+video_hidden_until_permission = true
+location_permission_requested_on_button_click = true
+location_updates_sent_to_backend = true
+logs_written_to_jsonl = true
+stop_button_clears_watch_position = true
+invalid_payloads_return_400 = true
+valid_payloads_return_200 = true

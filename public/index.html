@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Location Consent Video</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section id="consentPanel" class="consent-panel" aria-labelledby="appTitle">
+        <p class="eyebrow">Consent required</p>
+        <h1 id="appTitle">Location Consent Video</h1>
+        <p class="intro">
+          This page needs your location permission before showing the embedded video. Your browser will ask for permission, and location updates will be sent to this site only while this page is open and sharing is active.
+        </p>
+
+        <div class="notice" role="note">
+          <strong>What is shared:</strong>
+          latitude, longitude, accuracy, and the time reported by your browser.
+        </div>
+
+        <button id="allowButton" class="primary-button" type="button">
+          Allow Location and Continue
+        </button>
+      </section>
+
+      <section class="status-panel" aria-live="polite">
+        <span id="statusIndicator" class="status-indicator idle" aria-hidden="true"></span>
+        <p id="statusText">Location sharing has not started.</p>
+      </section>
+
+      <section id="videoSection" class="video-section" aria-labelledby="videoTitle" hidden>
+        <div class="video-header">
+          <div>
+            <p class="eyebrow">Embedded playback</p>
+            <h2 id="videoTitle">Video Player</h2>
+          </div>
+          <button id="stopButton" class="secondary-button" type="button">
+            Stop Sharing Location
+          </button>
+        </div>
+
+        <div class="video-frame">
+          <!-- Replace VIDEO_ID with the actual YouTube video ID before production use. -->
+          <iframe
+            src="https://www.youtube.com/embed/VIDEO_ID"
+            title="Embedded video player"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </section>
+    </main>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>
