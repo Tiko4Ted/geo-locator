@@ -137,10 +137,9 @@ if (require.main === module) {
   startServer();
 }
 
-module.exports = {
-  appendLocationLog,
-  app,
-  createLocationLogEntry,
-  isValidLocationPayload,
-  startServer
-};
+module.exports = app;
+module.exports.appendLocationLog = appendLocationLog;
+module.exports.app = app;
+module.exports.createLocationLogEntry = createLocationLogEntry;
+module.exports.isValidLocationPayload = isValidLocationPayload;
+module.exports.startServer = startServer;
